@@ -1,11 +1,12 @@
 {
   "name": "iadvize-chat",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
-    "react-scripts": "2.0.5"
+    "react-scripts": "2.0.5",
+    "styled-components": "^4.0.0"
   },
   "scripts": {
     "start": "react-scripts start",

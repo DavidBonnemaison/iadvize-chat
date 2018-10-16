@@ -1,26 +1,54 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { Store } from './context';
+import Chat from './components/Chat';
+import { Container } from './App.style';
 
-class App extends Component {
+const users = ['Jane', 'John'];
+
+class App extends React.Component {
+  state = {
+    messages: [
+      {
+        sender: 'Jane',
+        text: 'Coucou John',
+        timestamp: Date.now()
+      },
+      {
+        sender: 'John',
+        text: 'Salut Jane',
+        timestamp: Date.now()
+      }
+    ],
+    writing: {}
+  };
+
+  dispatch = {
+    submitMessage: ({ sender, text, timestamp }) =>
+      this.setState(prevState => ({
+        ...prevState,
+        messages: prevState.messages.concat({ sender, text, timestamp })
+      })),
+    isWriting: ({ user }) =>
+      this.setState(prevState => ({
+        ...prevState,
+        writing: { ...prevState.writing, [user]: true }
+      })),
+    stoppedWriting: ({ user }) =>
+      this.setState(prevState => ({
+        ...prevState,
+        writing: { ...prevState.writing, [user]: false }
+      }))
+  };
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <Store.Provider value={{ ...this.state, dispatch: this.dispatch }}>
+        <Container>
+          {users.map(user => (
+            <Chat key={`user-${user}`} fromUser={users.find(u => u !== user)} user={user} />
+          ))}
+        </Container>
+      </Store.Provider>
     );
   }
 }
